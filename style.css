@@ -1,0 +1,259 @@
+/* --- INTI PENATAAN GAYA CSS RESPONSIF --- */  
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+  font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+}  
+
+body { 
+  background-color: #f4f7f6; 
+  color: #333; 
+  padding: 10px; /* Diperkecil agar hemat ruang di HP */
+  letter-spacing: -0.01em; 
+}  
+
+.container { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+}  
+
+/* LOGO HEADER VENEX (GRADIENT & RESPONSIF) */
+.header-brand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0d0d0d 0%, #0a192f 50%, #050b14 100%);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 20px rgba(10, 25, 47, 0.4);
+  border: 1px solid rgba(0, 102, 204, 0.15);
+}
+
+.logo-venex {
+  font-size: 24px; /* Diperkecil sedikit agar tidak overflow di HP jadul */
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.logo-venex span {
+  color: #0088ff;
+  text-shadow: 0 0 12px rgba(0, 136, 255, 0.8), 0 0 25px rgba(0, 136, 255, 0.4);
+}
+
+/* Navigasi (Bisa scroll horizontal kalau tombolnya kepanjangan di HP) */
+nav { 
+  display: flex; 
+  gap: 8px; 
+  margin-bottom: 15px; 
+  background: #fff; 
+  padding: 8px; 
+  border-radius: 8px; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+  overflow-x: auto; /* Kunci responsif: agar navigasi bisa di-swipe ke samping di HP */
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+nav::-webkit-scrollbar {
+  display: none; /* Sembunyikan scrollbar navigasi biar estetik */
+}
+
+.nav-btn { 
+  padding: 8px 16px; 
+  border: none; 
+  background: none; 
+  cursor: pointer; 
+  font-weight: 600; 
+  color: #666; 
+  border-radius: 5px; 
+  transition: all 0.3s; 
+  font-size: 13px; 
+  flex-shrink: 0; /* Mencegah tombol gepeng di HP */
+}
+
+.nav-btn.active {
+  background: linear-gradient(135deg, #070f1e 0%, #0a192f 60%, #0052a3 100%);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 82, 163, 0.3);
+}
+
+/* Halaman */
+.page { display: none; }
+.page.active { display: block; }
+
+/* Dashboard Summary: Otomatis 2 Kolom di HP, 3-6 Kolom di PC */
+.dashboard-summary { 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); /* Default HP: 2 kolom sejajar */
+  gap: 10px; 
+  margin-bottom: 15px; 
+}  
+
+.card-box { 
+  background: #fff; 
+  padding: 12px; 
+  border-radius: 8px; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+  text-align: center; 
+}  
+
+.card-box h3 { 
+  font-size: 11px; 
+  color: #777; 
+  margin-bottom: 5px; 
+  text-transform: uppercase; 
+  font-weight: 600; 
+}  
+
+.card-box p { 
+  font-size: 15px; 
+  font-weight: 700; 
+}  
+
+.txt-masuk { color: #00aa66; }
+.txt-keluar { color: #ee3333; }
+.txt-transfer { color: #9933ff; }
+.txt-tabungan { color: #0066cc; }
+
+/* Bar Anggaran */
+.budget-container { 
+  background: #fff; 
+  padding: 15px; 
+  border-radius: 8px; 
+  margin-bottom: 15px; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+}  
+.bar-track { background: #eee; width: 100%; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
+.bar-fill { height: 100%; width: 0%; transition: width 0.3s; }
+
+/* Blok Formulir Utama & Mode Panik */
+.form-block { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; }
+.form-block.panic-mode { border: 2px solid #ee3333; background: #fff5f5; animation: shake 0.3s; }
+#panic-alert-msg { display: none; color: #ee3333; font-weight: 700; margin-bottom: 10px; font-size: 13px; }
+
+@keyframes shake { 
+  0%, 100% { transform: translateX(0); } 
+  20%, 60% { transform: translateX(-5px); } 
+  40%, 80% { transform: translateX(5px); } 
+}
+
+/* Tab Formulir */
+.form-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+.tab-btn { flex: 1; text-align: center; padding: 8px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 6px; font-weight: 600; font-size: 13px; color: #555; }
+.tab-btn.tab-active { background: #111; color: #fff; border-color: #111; }
+
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 12px; color: #444; }
+.form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; background-color: #fafafa; -webkit-appearance: none; }
+
+/* Jenis Tabs */
+.jenis-tabs { display: flex; gap: 8px; }
+.jenis-tabs button { flex: 1; padding: 10px; border: 1px solid #ccc; cursor: pointer; background: #fff; font-weight: 700; border-radius: 6px; font-size: 12px; color: #555; }
+.jenis-tabs button#btn-masuk.masuk-aktif { background: #00aa66; color: #fff; border-color: #00aa66; }
+.jenis-tabs button#btn-keluar.keluar-active { background: #ee3333; color: #fff; border-color: #ee3333; }
+
+.btn-satset { display: inline-block; margin-top: 8px; padding: 6px 14px; background: #0056b3; color: #fff; border: none; border-radius: 20px; font-size: 11px; font-weight: 800; cursor: pointer; }
+.btn-submit-premium { width: 100%; padding: 12px; background: #1e1e24; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; }
+
+.tag-bar { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag-pill { display: flex; align-items: center; background: #eee; border-radius: 15px; padding: 2px 8px; font-size: 11px; }
+.tag-click { border: none; background: none; cursor: pointer; font-weight: 600; color: #444; }
+.tag-clear { border: none; background: none; cursor: pointer; margin-left: 4px; color: #999; }
+
+/* Tata Letak Grid Utama (Default HP: numpuk vertikal ke bawah) */
+.analytics-grid { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px; 
+  margin-top: 10px; 
+}  
+
+.content-block { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; }
+.content-block h2 { font-size: 14px; margin-bottom: 12px; font-weight: 600; }
+.content-block.premium-header { padding: 0; border: 1px solid #ddd; overflow: hidden; }
+.content-block.premium-header h2 { background: #1e1e24; color: #fff; padding: 10px 15px; margin-bottom: 0; }
+.content-block.premium-header .inner-content { padding: 15px; }
+
+/* Tabel Responsif: Mengaktifkan scroll horizontal jika data kepanjangan di layar HP */
+table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 12px; }
+th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+th { background-color: #f8f9fa; font-weight: 600; }
+.table-scroll-container { 
+  overflow-x: auto; /* Solusi ampuh agar tabel tidak merusak layout HP */
+  background: #fff; 
+  border-radius: 6px; 
+  border: 1px solid #ddd; 
+  -webkit-overflow-scrolling: touch;
+}
+.btn-del-row { background: #ee3333; color: #fff; border: none; padding: 3px 6px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 10px; }
+
+.alokasi-row { margin-bottom: 10px; }
+.alokasi-labels { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px; font-weight: 600; }
+
+/* Grafik (Responsif Tinggi dan Lebar) */
+.chart-frame { display: flex; align-items: flex-end; justify-content: space-around; height: 150px; border-bottom: 2px solid #ccc; padding-top: 15px; margin-top: 10px; }
+.chart-column { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; max-width: 50px; }
+.column-fill { width: 75%; border-radius: 4px 4px 0 0; position: relative; display: flex; justify-content: center; transition: height 0.5s ease-out; }
+.column-pop-val { position: absolute; top: -18px; font-size: 9px; font-weight: 700; }
+.column-title { font-size: 9px; color: #666; margin-top: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+
+/* Target Impian */
+.goal-card-item { background: #f9f9f9; padding: 10px; border-radius: 6px; border: 1px solid #eee; margin-bottom: 10px; }
+.goal-meta { display: flex; justify-content: space-between; font-weight: 700; font-size: 11px; }
+.goal-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+.btn-goal-add { background: #0066cc; color: #fff; border: none; padding: 3px 6px; font-size: 10px; border-radius: 4px; cursor: pointer; }
+.badge-hutang { padding: 2px 6px; border-radius: 12px; font-size: 10px; font-weight: 700; }
+.badge-hutang.piutang { background: #e6f7ed; color: #00aa66; }
+.badge-hutang.hutang { background: #fff0f0; color: #ee3333; }
+.btn-action-hutang { background: #0066cc; color: #fff; border: none; padding: 4px 6px; border-radius: 4px; cursor: pointer; font-size: 10px; }
+
+/* Kalender Visual */
+.calendar-widget { background: #fff; padding: 12px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; }
+.calendar-header { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 13px; }
+.calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 10px; color: #999; }
+.calendar-dates { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.calendar-date-cell { padding: 5px; font-size: 11px; border-radius: 4px; cursor: pointer; background: #f5f5f5; font-weight: 600; }
+.calendar-date-empty { padding: 5px; }
+.tanggal-hari-ini { background: #e5e5e5 !important; color: #111; border: dashed 1px #111; }
+.tanggal-terpilih { background: #111 !important; color: #fff !important; }
+
+
+/* ==========================================================================
+   ⚡ MEDIA QUERIES: ATURAN TAMPILAN KHUSUS LAPTOP / KOMPUTER (MIN-WIDTH: 768px)
+   ========================================================================== */
+@media (min-width: 768px) {
+  body { 
+    padding: 20px; /* Layar PC lebih luas, tambah padding luar */
+  }
+
+  .logo-venex {
+    font-size: 32px; /* Logo PC dibuat gagah kembali */
+  }
+
+  /* Dashboard summary di PC otomatis jadi 6 kolom sejajar horizontal */
+  .dashboard-summary { 
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 15px;
+  }
+
+  .card-box h3 { font-size: 13px; }
+  .card-box p { font-size: 18px; }
+
+  /* Grid utama berubah jadi 2 kolom berdampingan kanan-kiri di layar lebar */
+  .analytics-grid { 
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+  }
+
+  /* Navigasi di PC tidak perlu diswipe lagi, tombol melebar natural */
+  .nav-btn {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+}
