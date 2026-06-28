@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Venex</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page { display: none; }
+    .page.active { display: block !important; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header-brand">
+    <div class="logo-venex">Vene<span>x</span></div>
+  </div>
+
+  <nav style="display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px;">
+    <button class="nav-btn active" id="nav-dashboard" onclick="switchPage('dashboard')">Dasbor</button>
+    <button class="nav-btn" id="nav-rekap" onclick="switchPage('rekap-page')">Analisis & Rekap</button>
+    <button class="nav-btn" id="nav-riwayat" onclick="switchPage('riwayat')">Riwayat Jurnal</button>
+    <button class="nav-btn" id="nav-hutang" onclick="switchPage('hutang-page')">Hutang & Piutang</button>
+  </nav>
+
+  <div id="dashboard" class="page active">
+    <div class="dashboard-summary">
+      <div class="card-box"><h3>Total Saldo</h3><p id="saldo-box">Rp 0</p></div>
+      <div class="card-box"><h3>Pemasukan</h3><p id="masuk-box" class="txt-masuk">Rp 0</p></div>
+      <div class="card-box"><h3>Pengeluaran</h3><p id="keluar-box" class="txt-keluar">Rp 0</p></div>
+      <div class="card-box"><h3>Uang Tunai</h3><p id="wallet-cash-box">Rp 0</p></div>
+      <div class="card-box"><h3>Bank (ATM)</h3><p id="wallet-bank-box">Rp 0</p></div>
+      <div class="card-box"><h3>E-Wallet</h3><p id="wallet-wallet-box">Rp 0</p></div>
+    </div>
+
+    <div class="budget-container">
+      <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: bold;">
+        <span>Sisa Anggaran Hari Ini</span>
+        <span id="budget-box">Rp 0</span>
+      </div>
+      <div class="bar-track"><div id="budget-bar" class="bar-fill"></div></div>
+      <div id="info-potongan-besok" style="font-size: 11px; color: #ee3333; margin-top: 5px; display: none;"></div>
+      <button class="btn-satset" onclick="ubahBatasAnggaran()" style="margin-top: 10px;">Atur Batas Harian</button>
+    </div>
+
+    <div class="analytics-grid">
+      <div>
+        <div class="form-block" id="form-main-block">
+          <div id="panic-alert-msg">🚨 OVER-BUDGET! Transaksi ini melampaui batas harian lo!</div>
+          <div class="form-tabs">
+            <button type="button" class="tab-btn tab-active" id="tab-mode-biasa" onclick="gantiModeForm('biasa')">Catat Kas</button>
+            <button type="button" class="tab-btn" id="tab-mode-transfer" onclick="gantiModeForm('transfer')">Mutasi Uang</button>
+          </div>
+
+          <form id="transaksiForm" onsubmit="simpanTransaksi(event)">
+            <div id="form-bagian-biasa">
+              <div class="form-group">
+                <label>Jenis Transaksi</label>
+                <div class="jenis-tabs">
+                  <button type="button" id="btn-masuk" class="masuk-aktif" onclick="pilihJenis('pemasukan')">Pemasukan</button>
+                  <button type="button" id="btn-keluar" onclick="pilihJenis('pengeluaran')">Pengeluaran</button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Kantong Saldo</label>
+                <select id="dompet">
+                  <option value="cash">Uang Tunai (Cash)</option>
+                  <option value="bank">Bank / ATM</option>
+                  <option value="wallet">Dompet Elektronik (E-Wallet)</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="form-bagian-transfer" style="display: none;">
+              <div class="form-group">
+                <label>Dari Kantong</label>
+                <select id="transfer-dari">
+                  <option value="cash">Uang Tunai</option>
+                  <option value="bank">Bank / ATM</option>
+                  <option value="wallet">E-Wallet</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Ke Kantong Tujuan</label>
+                <select id="transfer-ke">
+                  <option value="bank">Bank / ATM</option>
+                  <option value="cash">Uang Tunai</option>
+                  <option value="wallet">E-Wallet</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Keterangan / Item</label>
+              <input type="text" id="keterangan" placeholder="Contoh: Nasi Goreng / Gaji" required>
+              <div class="tag-bar" id="tag-bar-area" style="margin-top: 8px;">
+                <div id="quick-tags-container" style="display: flex; gap: 5px; flex-wrap: wrap;"></div>
+                <button type="button" class="btn-satset" onclick="satsetSimpanFavorit()" style="background: #555;">+ Jadikan Tag Cepat</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Nominal Uang (Rp)</label>
+              <input type="number" id="jumlah" placeholder="Masukkan jumlah uang" required oninput="cekDeteksiAlarmBahaya()">
+            </div>
+
+            <button type="submit" class="btn-submit-premium" id="btn-submit-text">Amankan Transaksi</button>
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <div class="content-block">
+          <h2>🎯 Celengan Impian (Goals)</h2>
+          <div style="display: flex; gap: 4px; margin-bottom: 12px; align-items: center;">
+            <input type="text" id="goalNama" placeholder="Nama Impian" style="width: 45%; padding: 6px 8px; font-size: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+            <input type="number" id="goalTarget" placeholder="Target Rp" style="width: 35%; padding: 6px 8px; font-size: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+            <button type="button" onclick="tambahTargetImpian()" style="width: 20%; padding: 6px 0; font-size: 12px; background: #111; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer; text-align: center;">+ Target</button>
+          </div>
+          <div id="goals-container"></div>
+        </div>
+
+        <div class="calendar-widget">
+          <div class="calendar-header">
+            <button onclick="gantiBulanKalender(-1)">◀</button>
+            <span id="calendar-month-year">Bulan Tahun</span>
+            <button onclick="gantiBulanKalender(1)">▶</button>
+          </div>
+          <div class="calendar-days">
+            <div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div><div>Min</div>
+          </div>
+          <div class="calendar-dates" id="calendar-dates"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="rekap-page" class="page">
+    <div class="content-block premium-header">
+      <h2>📊 Grafik Alokasi Pengeluaran Bulan Ini</h2>
+      <div class="inner-content">
+        <div class="chart-frame" id="chart-container"></div>
+      </div>
+    </div>
+    
+    <div class="content-block">
+      <h2>📋 Detail Pengeluaran per Item</h2>
+      <div id="alokasi-container"></div>
+    </div>
+
+    <div class="content-block">
+      <h2>📈 Rekap Siklus & Arus Bersih</h2>
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Periode Waktu</th>
+              <th>Pemasukan</th>
+              <th>Pengeluaran</th>
+              <th>Selisih (Netto)</th>
+            </tr>
+          </thead>
+          <tbody id="tabel-rekap-bersih-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="riwayat" class="page">
+    <div class="content-block">
+      <h2>🔍 Filter & Cari Data Jurnal</h2>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+        <input type="text" id="filter-search" placeholder="Cari keterangan..." style="flex:1; padding:8px; border: 1px solid #ccc; border-radius:6px;" oninput="updateTampilan()">
+        <select id="filter-type" style="padding:8px; border:1px solid #ccc; border-radius:6px;" onchange="updateTampilan()">
+          <option value="semua">Semua Tipe</option>
+          <option value="pemasukan">Pemasukan</option>
+          <option value="pengeluaran">Pengeluaran</option>
+          <option value="transfer">Transfer</option>
+        </select>
+        <select id="filter-dompet" style="padding:8px; border:1px solid #ccc; border-radius:6px;" onchange="updateTampilan()">
+          <option value="semua">Semua Kantong</option>
+          <option value="cash">Tunai</option>
+          <option value="bank">Bank</option>
+          <option value="wallet">E-Wallet</option>
+        </select>
+      </div>
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th>Nominal</th><th>Aksi</th></tr>
+          </thead>
+          <tbody id="tabel-body"></tbody>
+        </table>
+      </div>
+      <button type="button" class="btn-submit-premium" onclick="bersihkanSemuaData()" style="background:#ee3333; margin-top:20px; color:#fff; padding:10px; border:none; border-radius:6px; cursor:pointer; width:100%;">🚨 RESET TOTAL DATA APP</button>
+    </div>
+  </div>
+
+  <div id="hutang-page" class="page">
+    <div class="dashboard-summary">
+      <div class="card-box"><h3>Total Piutang (Hak Lo)</h3><p id="total-piutang-box" class="txt-masuk">Rp 0</p></div>
+      <div class="card-box"><h3>Total Hutang (Beban Lo)</h3><p id="total-hutang-box" class="txt-keluar">Rp 0</p></div>
+    </div>
+    <div class="form-block">
+      <h2>📝 Catat Beban Hutang/Piutang Baru</h2>
+      <form id="hutangForm" onsubmit="simpanHutangBaru(event)">
+        <div class="form-group">
+          <label>Jenis Transaksi</label>
+          <select id="hutang-tipe">
+            <option value="hutang">Hutang (Gua Pinjem Duit Orang)</option>
+            <option value="piutang">Piutang (Orang Utang Ke Gua)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nama Orang / Kolega</label>
+          <input type="text" id="hutang-nama" placeholder="Contoh: Si Andi / Bos" required>
+        </div>
+        <div class="form-group">
+          <label>Keterangan Alasan</label>
+          <input type="text" id="hutang-ket" placeholder="Contoh: Pinjam buat beli bensin" required>
+        </div>
+        <div class="form-group">
+          <label>Jumlah Dana (Rp)</label>
+          <input type="number" id="hutang-jumlah" placeholder="Masukkan jumlah nominal" required>
+        </div>
+        <button type="submit" class="btn-submit-premium">Simpan Log Hutang</button>
+      </form>
+    </div>
+    <div class="content-block">
+      <h2>📋 Daftar Hutang & Piutang Berjalan</h2>
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr><th>Tanggal</th><th>Nama</th><th>Status</th><th>Keterangan</th><th>Sisa Saldo</th><th>Aksi</th></tr>
+          </thead>
+          <tbody id="tabel-hutang-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
